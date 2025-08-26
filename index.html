@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Chính</title>
+    <!-- CSS is linked here. We will add the styles for the scrolling images later. -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='indexStyle.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg">
+    <div class="container">
+        <!-- Main title section -->
+        <div class="ctn-1">
+            <h1 class="text-4xl font-bold mb-4">
+                <span class="text-black">WELCOME TO</span> <span class="text-[#ff7000]">FOCUS</span>
+            </h1>
+        </div>
+
+        <!-- Flashcard options section -->
+        <div class="ctn-2">
+            <h2 class="section-title">What should I do for you?</h2>
+            
+            <div class="flashcard-options">
+                <!-- First flashcard button with image icon -->
+                <a href="{{ url_for('upload') }}" class="flashcard-option">
+                    <div class="option-content">
+                        <img src="static/images/createFlaskcardIcon-01.webp" alt="Create Flashcard" class="option-icon-img">
+                        <span class="option-text">Create a flashcard</span>
+                    </div>
+                </a>
+                
+                <!-- Second flashcard button with image icon -->
+                <a href="{{ url_for('upload') }}" class="flashcard-option">
+                    <div class="option-content">
+                        <img src="static/images/summaryIcon-01.webp" alt="Create Another Card" class="option-icon-img">
+                        <span class="option-text">Create a summary</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- New image gallery section -->
+        <div class="ctn-3">
+            <div class="slideshow-container">
+                <div class="image-gallery">
+                    <!-- Placeholder images for the gallery -->
+                    <img src="static/images/ad1-01.webp" alt="Placeholder Image 1" class="gallery-image">
+                    <img src="static/images/ad2-01.webp" alt="Placeholder Image 2" class="gallery-image">
+                    <img src="static/images/ad3-01.webp" alt="Placeholder Image 3" class="gallery-image">
+                </div>
+            </div>
+            <!-- Moved dots-container inside ctn-3 to ensure it's part of the slideshow section -->
+            <div class="dots-container">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Menu bar -->
+    <div class="ctn-menu-bar">
+        <!-- 2 buttons on the left -->
+        <div class="menu-item">
+            <!-- Changed href to force page reload -->
+            <a href="javascript:window.location.reload();" class="menu-link">
+                <img src="static/images/homeIcon-01.webp" class="menu-icon">
+                <span class="menu-text">Home</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="wallet.html" class="menu-link">
+                <img src="static/images/historyIcon-01.webp" class="menu-icon">
+                <span class="menu-text">History</span>
+            </a>
+        </div>
+
+        <!-- The special center button -->
+        <div class="menu-item-center">
+            <a href="{{ url_for('upload') }}" class="menu-link-center">
+                <img src="static/images/addIcon-01.webp" class="menu-icon-center">
+            </a>
+        </div>
+
+        <!-- 2 buttons on the right -->
+        <div class="menu-item">
+            <a href="history.html" class="menu-link">
+                <img src="static/images/musicIcon-01.webp" class="menu-icon">
+                <span class="menu-text">Meditation</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="profile.html" class="menu-link">
+                <img src="static/images/settingIcon-01.webp" class="menu-icon">
+                <span class="menu-text">Setting</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.style.opacity = '1';
+            
+            let slideIndex = 0;
+            const slides = document.querySelectorAll('.gallery-image');
+            const dots = document.querySelectorAll('.dot');
+            const gallery = document.querySelector('.image-gallery');
+            let slideInterval;
+
+            function showSlides() {
+                if (slideIndex >= slides.length) {
+                    slideIndex = 0;
+                }
+                if (slideIndex < 0) {
+                    slideIndex = slides.length - 1;
+                }
+                gallery.style.transform = `translateX(${-slideIndex * 100}%)`;
+
+                dots.forEach(dot => dot.classList.remove('active'));
+                dots[slideIndex].classList.add('active');
+            }
+
+            function nextSlide() {
+                slideIndex++;
+                showSlides();
+            }
+
+            function resetInterval() {
+                clearInterval(slideInterval);
+                slideInterval = setInterval(nextSlide, 3000); // Tự động chuyển slide sau 3 giây
+            }
+
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    slideIndex = index;
+                    showSlides();
+                    resetInterval();
+                });
+            });
+
+            showSlides();
+            resetInterval();
+        });
+    </script>
+</body>
+</html>

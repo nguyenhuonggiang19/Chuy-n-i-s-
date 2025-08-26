@@ -1,0 +1,81 @@
+/* Reset and base styles */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #FFFFFF;
+    background-image: none;
+    overflow: hidden; /* Prevent scrolling */
+}
+
+/* Initial hidden state */
+.hidden-element {
+    opacity: 0;
+}
+
+/* Common transition for all elements */
+.logo, 
+.welcome-image {
+    transition: opacity 1s ease-in-out;
+}
+
+/* Fade out effect */
+.fade-out {
+    opacity: 0 !important;
+}
+
+/* Logo styles */
+.logo {
+    width: 150px;
+    height: auto;
+    border-radius: 9999px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10; /* Make sure logo appears above background */
+}
+
+/* Full-screen welcome image */
+.welcome-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover; /* Ensure image covers whole screen */
+    object-position: center;
+    z-index: 1;
+}
+
+/* Container for centering */
+.container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Text overlay styles (if needed) */
+.welcome-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 2rem;
+    font-weight: 600;
+    text-align: center;
+    z-index: 5;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.focus-text {
+    color: #ff7000;
+    display: block; /* Make it appear on new line */
+}

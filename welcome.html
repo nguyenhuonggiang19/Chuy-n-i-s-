@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chào mừng</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='welcomeStyle.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="flex flex-col items-center justify-center">
+            <!-- Logo ban đầu ẩn -->
+            <img src="static/images/gradientLogo-01-01.webp" alt="App Logo" class="logo hidden-element mb-4" id="logo">
+            <!-- Thay thế welcome text bằng hình ảnh -->
+            <img src="static/images/slogan-01.webp" alt="Welcome Message" class="welcome-image hidden-element" id="welcome-image">
+        </div>
+    </div>
+
+    <script>
+        const logo = document.getElementById('logo');
+        const welcomeImage = document.getElementById('welcome-image');
+
+        // Bước 1: Logo hiện dần sau khi trang tải xong (1s)
+        document.addEventListener('DOMContentLoaded', function() {
+            logo.classList.remove('hidden-element');
+        });
+
+        // Bước 2: Logo mờ dần sau khi hiển thị (2s = 1s hiện + 1s giữ)
+        setTimeout(function() {
+            logo.classList.add('fade-out');
+        }, 2000);
+
+        // Bước 3: Hình ảnh hiện dần sau khi logo mờ đi (3s = 2s + 1s mờ)
+        setTimeout(function() {
+            welcomeImage.classList.remove('hidden-element');
+        }, 3000);
+
+        // Bước 4: Hình ảnh mờ dần sau khi hiển thị (5s = 3s + 1s hiện + 1s giữ)
+        setTimeout(function() {
+            welcomeImage.classList.add('fade-out');
+        }, 5000);
+
+        // Bước 5: Chuyển trang sau khi hình ảnh mờ đi (6s = 5s + 1s mờ)
+        setTimeout(function() {
+            window.location.href = "/index";
+        }, 6000);
+    </script>
+</body>
+</html>

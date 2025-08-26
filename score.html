@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcard Score</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='scoreStyle.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Phần header session -->
+        <div class="ctn-1">
+            <h1 class="text-4xl font-bold mb-4">
+                <span class="text-black">SESSION</span><br>
+                <span class="text-orange">{{ session_id }}</span>
+            </h1>
+        </div>
+
+        <!-- Phần chính hiển thị điểm -->
+        <div class="score-container">
+            <!-- Phần điểm chính -->
+            <div class="score-card">
+                <h2 class="score-title">YOUR SCORE</h2>
+                <div class="score-result">
+                    <div class="score-percentage">{{ (correct_answers / total_questions * 100) | round | int }}%</div>
+                </div>
+            </div>
+
+            <!-- Phần 2: Chi tiết điểm -->
+            <div class="score-details-container">
+                <!-- Thời gian -->
+                <div class="score-detail-card">
+                    <div class="detail-title">TIME</div>
+                    <div class="detail-value">
+                        {% if time >= 60 %}
+                            {{ (time // 60)|int }}m {{ (time % 60)|int }}s
+                        {% else %}
+                            {{ time }}s
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Câu đúng -->
+                <div class="score-detail-card">
+                    <div class="detail-title">CORRECT</div>
+                    <div class="detail-value">{{ correct_answers }}/{{ total_questions }}</div>
+                </div>
+            </div>
+
+            <!-- Các nút hành động -->
+            <div class="action-buttons">
+                <a href="{{ url_for('result', session_id=session_id) }}" class="action-button retry-button">TRY AGAIN</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu bar -->
+    <div class="ctn-menu-bar">
+        <div class="menu-item">
+            <a href="{{ url_for('index') }}" class="menu-link">
+                <img src="{{ url_for('static', filename='images/homeIcon-01.webp') }}" alt="Home" class="menu-icon">
+                <span class="menu-text">Home</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="#" class="menu-link">
+                <img src="{{ url_for('static', filename='images/historyIcon-01.webp') }}" alt="History" class="menu-icon">
+                <span class="menu-text">History</span>
+            </a>
+        </div>
+        <div class="menu-item-center">
+            <a href="{{ url_for('upload') }}" class="menu-link-center">
+                <img src="{{ url_for('static', filename='images/addIcon-01.webp') }}" alt="Create New" class="menu-icon-center">
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="#" class="menu-link">
+                <img src="{{ url_for('static', filename='images/musicIcon-01.webp') }}" alt="Meditation" class="menu-icon">
+                <span class="menu-text">Meditation</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="#" class="menu-link">
+                <img src="{{ url_for('static', filename='images/settingIcon-01.webp') }}" alt="Settings" class="menu-icon">
+                <span class="menu-text">Setting</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+    // Thêm hiệu ứng fade in khi trang load
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(() => {
+            document.body.style.opacity = '1';
+        }, 100);
+    });
+    </script>
+</body>
+</html>

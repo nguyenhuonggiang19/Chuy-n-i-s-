@@ -1,0 +1,234 @@
+/* static/indexstyle.css */
+/* Các kiểu chung cho trang chính */
+
+@import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+body {
+    background-color: #FFFFFF;
+    background-image: none;
+    font-family: 'Inter', sans-serif;
+    opacity: 0;
+    transition: opacity 1s ease-in; /* Thời gian hiện dần: 1 giây */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 2rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Cho phép container chiếm hết không gian còn lại */
+    box-sizing: border-box;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.ctn-1 {
+    width: 100%;
+    text-align: left; /* Căn lề trái nội dung trong ctn-1 */
+}
+
+/* Heading styles */
+.ctn-1 h1 {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+/* Text colors */
+.text-black {
+    color: #000000;
+}
+
+.text-\[\#ff7000\] {
+    color: #ff7000;
+}
+
+/* Kiểu cho menu bar */
+.ctn-menu-bar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px; /* Phù hợp với container */
+    padding: 1rem 0.5rem;
+    background-color: #fff;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border-top-left-radius: 1.5rem;
+    border-top-right-radius: 1.5rem;
+    box-sizing: border-box;
+}
+
+.menu-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    flex: 1;
+}
+
+.menu-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #888;
+    /* Thêm transition cho border để tạo hiệu ứng mượt mà */
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+/* Sửa lại hiệu ứng hover cho các nút bên */
+.menu-link:hover {
+    color: #888; /* Giữ nguyên màu chữ */
+    border-bottom: 3px solid #FF7000; /* Đổi màu viền dưới */
+    background-color: transparent !important;
+}
+
+.menu-icon {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 0.25rem;
+}
+
+.menu-text {
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* Nút giữa đặc biệt */
+.menu-item-center {
+    position: relative;
+    margin-top: -30px; /* Đẩy lên trên nhiều hơn */
+    z-index: 10;
+}
+
+.menu-link-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70px;
+    height: 70px;
+    background-color: #FF7000;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.menu-icon-center {
+    width: 35px;
+    height: 35px;
+    filter: brightness(0) invert(1);
+}
+
+.menu-link-center:hover {
+    transform: scale(1.1);
+    background-color: #FF7000;
+}
+
+/* Thêm hiệu ứng cho các nút flashcard */
+.flashcard-option:hover .option-text {
+    color: #FF7000;
+}
+
+/* Container spacing */
+.ctn-2 {
+    margin-top: 50px;
+    width: 100%;
+}
+
+/* Section title */
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #000000;
+    margin-bottom: 2rem;
+    text-align: left; /* Đã sửa: Căn lề trái */
+}
+
+/* Flashcard options container */
+.flashcard-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 500px;
+    margin-left: 0; /* Đã sửa: Đảm bảo căn lề trái */
+}
+
+/* Flashcard button styles */
+.flashcard-option {
+    display: block;
+    text-decoration: none;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    background-color: white;
+    transition: all 0.3s ease;
+    transform-origin: center; /* Đã sửa: Thay đổi transform-origin thành center */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.option-content {
+    display: flex;
+    flex-direction: row; /* Đã sửa: Sắp xếp theo hàng ngang */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: flex-start; /* Căn lề trái */
+    gap: 1rem; /* Khoảng cách giữa icon và text */
+}
+
+.option-icon-img {
+    width: 24px;
+    height: 24px;
+}
+
+.option-text {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #000000;
+    transition: inherit;
+}
+
+/* Hover effects */
+.flashcard-option:hover {
+    transform: scale(1.03);
+    border-color: #FF7000;
+    box-shadow: 0 4px 12px rgba(255, 112, 0, 0.1);
+}
+
+/* Kiểu cho ctn-3 và hiệu ứng slideshow */
+.ctn-3 {
+    margin-top: 30px;
+    width: 100%;
+    position: relative;
+    max-width: 400px; /* Thêm max-width để slideshow trông đẹp hơn */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.slideshow-container {
+    overflow: hidden; /* Chỉ hiển thị một ảnh tại một thời điểm */
+    border-radius: 12px;
+}
+
+.image-gallery {
+    display: flex;
+    transition: transform 0.5s ease-in-out; /* Hiệu ứng chuyển slide */
+}
+
+.gallery-image {
+    width: 100%; /* Chiếm toàn bộ chiều rộng của slideshow-container */
+    height: auto;
+    object-fit: cover;
+    flex-shrink: 0;
+}

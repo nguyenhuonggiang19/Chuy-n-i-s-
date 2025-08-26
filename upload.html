@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Files</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='uploadStyle.css') }}">
+</head>
+<body class="bg">
+    <div class="container">
+        <div class="ctn-1">
+            <h1 class="text-4xl font-bold mb-4">
+                <span class="text-black">UPLOAD A PDF TO</span> <span class="text-orange">GET STARTED</span>
+            </h1>
+        </div>
+
+        {% if error %}
+        <div class="error-message">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <div class="ctn-3">
+            <h2>ENTER YOUR TOPIC</h2>
+            <input type="text" name="flashcard_topic" id="topic-input" placeholder="Type anything you want" class="flashcard-topic-input">
+        </div>
+
+        <div class="ctn-2">
+            <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data" class="upload-form" id="upload-form">
+                <label for="pdf-upload" class="upload-box">
+                    <img src="{{ url_for('static', filename='/images/scanIcon-01.webp') }}" alt="Upload Icon" class="upload-icon">
+                </label>
+                <input type="file" name="file" id="pdf-upload" accept=".pdf" class="hidden-file-input" multiple>
+                
+                <div class="file-list-wrapper" id="file-list-wrapper">
+                    <div class="file-list" id="file-list"></div>
+                </div>
+                
+                <button type="submit" class="submit-button" id="submit-btn" disabled>GENERATE</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="ctn-menu-bar">
+        <div class="menu-item">
+            <a href="{{ url_for('index') }}" class="menu-link">
+                <img src="{{ url_for('static', filename='images/homeIcon-01.webp') }}" class="menu-icon">
+                <span class="menu-text">Home</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="#" class="menu-link">
+                <img src="{{ url_for('static', filename='images/historyIcon-01.webp') }}" class="menu-icon">
+                <span class="menu-text">History</span>
+            </a>
+        </div>
+        <div class="menu-item-center">
+            <a href="{{ url_for('upload') }}" class="menu-link-center">
+                <img src="{{ url_for('static', filename='images/addIcon-01.webp') }}" class="menu-icon-center">
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="#" class="menu-link">
+                <img src="{{ url_for('static', filename='images/musicIcon-01.webp') }}" class="menu-icon">
+                <span class="menu-text">Meditation</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="#" class="menu-link">
+                <img src="{{ url_for('static', filename='images/settingIcon-01.webp') }}" class="menu-icon">
+                <span class="menu-text">Setting</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fade in animation
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+            
+            // ĐÃ SỬA LỖI Ở ĐÂY:
+            document.querySelectorAll('a[href^="/"]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (this.href && !this.href.includes('#') && !this.href.includes('javascript:')) {
+                        e.preventDefault();
+                        document.body.style.opacity = '0';
+                        setTimeout(() => {
+                            window.location.href = this.href;
+                        }, 500);
+                    }
+                });
+            });
+            
+            // File upload functionality
+            const fileInput = document.getElementById('pdf-upload');
+            const submitBtn = document.getElementById('submit-btn');
+            const fileListWrapper = document.getElementById('file-list-wrapper');
+            const fileList = document.getElementById('file-list');
+            const fileCounter = document.getElementById('file-counter');
+            const uploadLabel = document.getElementById('upload-label');
+            const uploadText = document.getElementById('upload-text');
+            const uploadForm = document.getElementById('upload-form');
+            const topicInput = document.getElementById('topic-input');
+            
+            let selectedFiles = [];
+            
+            fileInput.addEventListener('change', function(e) {
+                const newFiles = Array.from(this.files).filter(file => 
+                    file.name.toLowerCase().endsWith('.pdf')
+                );
+                
+                if (selectedFiles.length + newFiles.length > 3) {
+                    showTemporaryMessage('You can only upload up to 3 PDF files!');
+                    this.value = '';
+                    return;
+                }
+                
+                newFiles.forEach(newFile => {
+                    if (!selectedFiles.some(existingFile => 
+                        existingFile.name === newFile.name && 
+                        existingFile.size === newFile.size
+                    )) {
+                        selectedFiles.push(newFile);
+                    }
+                });
+                
+                updateFileList();
+                updateCounter();
+                this.value = '';
+            });
+            
+function updateFileList() {
+    fileList.innerHTML = '';
+    
+    selectedFiles.forEach((file, index) => {
+        const fileItem = document.createElement('div');
+        fileItem.className = 'file-item';
+        
+        const fileName = document.createElement('span');
+        fileName.className = 'file-name';
+        fileName.textContent = file.name;
+        
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'delete-btn';
+        
+        // Cách tốt nhất - tạo element img
+        const deleteIcon = document.createElement('img');
+        deleteIcon.src = "{{ url_for('static', filename='images/binIcon-01.webp') }}";
+        deleteIcon.className = "delete-icon";
+        deleteIcon.alt = "Delete";
+        deleteBtn.appendChild(deleteIcon);
+        
+        deleteBtn.onclick = (e) => {
+            e.preventDefault();
+            selectedFiles.splice(index, 1);
+            updateFileList();
+            updateCounter();
+        };
+        
+        fileItem.appendChild(fileName);
+        fileItem.appendChild(deleteBtn);
+        fileList.appendChild(fileItem);
+    });
+    
+    fileListWrapper.style.display = selectedFiles.length ? 'block' : 'none';
+    submitBtn.disabled = selectedFiles.length === 0;
+}
+            function updateCounter() {
+                fileCounter.textContent = `${selectedFiles.length}/3 files selected`;
+            }
+            
+            function showTemporaryMessage(message) {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'error-message';
+                msgDiv.textContent = message;
+                document.querySelector('.container').insertBefore(msgDiv, document.querySelector('.ctn-3'));
+                
+                setTimeout(() => {
+                    msgDiv.style.opacity = '0';
+                    setTimeout(() => msgDiv.remove(), 500);
+                }, 3000);
+            }
+            
+            uploadForm.addEventListener('submit', function(e) {
+                if (selectedFiles.length === 0) {
+                    e.preventDefault();
+                    showTemporaryMessage('Please select at least 1 PDF file');
+                    return false;
+                }
+                
+                if (topicInput.value.trim()) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'flashcard_topic';
+                    input.value = topicInput.value.trim();
+                    this.appendChild(input);
+                }
+                
+                // Show loading state
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = 'GENERATING';
+                
+                return true;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcard Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='resultStyle.css') }}">
+</head>
+<body class="bg">
+    <div class="container">
+        <div class="ctn-1">
+            <h1 class="text-4xl font-bold mb-4">
+                <span class="text-black">SESSION</span><br>
+                <span class="text-orange">{{ session_id }}</span>
+            </h1>
+            <div class="timer-container">
+                <span class="timer-icon">⏱️</span>
+                <span id="time-display">00:00</span>
+            </div>
+        </div>
+
+        <div class="flashcards-container">
+            {% for question in questions %}
+            <div class="flashcard-main" data-correct="{{ question.answer | upper }}">
+                <div class="question-container">
+                    Question {{ loop.index }}: {{ question.question }}
+                </div>
+                <div class="options-container">
+                    {% for option in ['A', 'B', 'C', 'D'] %}
+                    <div class="option-box" data-option="{{ option }}">
+                        <span class="option-label">{{ option }}.</span> 
+                        <span class="option-text">{{ question.options[loop.index0] }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="ctn-menu-bar">
+        <div class="menu-item">
+            <a href="{{ url_for('index') }}" class="menu-link">
+                <img src="{{ url_for('static', filename='images/homeIcon-01.webp') }}" class="menu-icon">
+                <span class="menu-text">Home</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="#" class="menu-link">
+                <img src="{{ url_for('static', filename='images/historyIcon-01.webp') }}" class="menu-icon">
+                <span class="menu-text">History</span>
+            </a>
+        </div>
+        <div class="menu-item-center">
+            <a href="{{ url_for('upload') }}" class="menu-link-center">
+                <img src="{{ url_for('static', filename='images/addIcon-01.webp') }}" class="menu-icon-center">
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="#" class="menu-link">
+                <img src="{{ url_for('static', filename='images/musicIcon-01.webp') }}" class="menu-icon">
+                <span class="menu-text">Meditation</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="#" class="menu-link">
+                <img src="{{ url_for('static', filename='images/settingIcon-01.webp') }}" class="menu-icon">
+                <span class="menu-text">Setting</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Fade in animation
+        setTimeout(() => {
+            document.body.style.opacity = '1';
+        }, 100);
+
+        // Link transition effect
+        document.querySelectorAll('a[href^="/"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (this.href && !this.href.includes('#') && !this.href.includes('javascript:')) {
+                    e.preventDefault();
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        window.location.href = this.href;
+                    }, 500);
+                }
+            });
+        });
+
+        // Timer functionality
+        let startTime = Date.now();
+        const timeDisplay = document.getElementById('time-display');
+        let timerInterval = setInterval(updateTimer, 1000);
+
+        function updateTimer() {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
+            const seconds = (elapsed % 60).toString().padStart(2, '0');
+            timeDisplay.textContent = `${minutes}:${seconds}`;
+        }
+
+        let totalQuestions = document.querySelectorAll('.flashcard-main').length;
+        let answeredQuestions = 0;
+
+        document.querySelectorAll('.option-box').forEach(box => {
+            box.addEventListener('click', function() {
+                const flashcard = this.closest('.flashcard-main');
+                const optionsContainer = flashcard.querySelector('.options-container');
+
+                // Check if already answered
+                if (optionsContainer.classList.contains('answered')) {
+                    return;
+                }
+
+                // Mark as answered
+                optionsContainer.classList.add('answered');
+                answeredQuestions++;
+
+                // Apply styles based on answer
+                const selectedAnswer = this.dataset.option;
+                const correctAnswer = flashcard.dataset.correct;
+
+                if (selectedAnswer.toUpperCase() === correctAnswer.toUpperCase()) {
+                    this.classList.add('correct-selected');
+                } else {
+                    this.classList.add('incorrect-selected');
+                    const correctOption = optionsContainer.querySelector(`[data-option="${correctAnswer}"]`);
+                    if (correctOption) {
+                        correctOption.classList.add('correct-answer-revealed');
+                    }
+                }
+
+                // Check if all questions answered
+                if (answeredQuestions === totalQuestions) {
+                    clearInterval(timerInterval);
+                    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                    const correctCount = document.querySelectorAll('.correct-selected').length;
+                    
+                    // Wait 1 second then redirect to score page
+                    setTimeout(() => {
+                        window.location.href = `/score?session_id={{ session_id }}&correct=${correctCount}&total=${totalQuestions}&time=${elapsed}`;
+                    }, 1000);
+                }
+            });
+        });
+    });
+    </script>
+</body>
+</html>
