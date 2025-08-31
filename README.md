@@ -55,7 +55,7 @@ Score hiển thị điểm lớn trong vòng tròn + nút TRY AGAIN.
 
 🗺️ Roadmap (GFI)
 
-Đa định dạng: PDF
+Định dạng: PDF
 
 AI/NLP: Gợi ý câu trả lời, tạo câu hỏi từ đoạn văn; summarization.
 
